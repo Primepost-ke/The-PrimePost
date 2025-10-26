@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Prime Post - Trusted Trending News</title>
+  <style>
+    /* === MASTER COPY STYLING (unchanged) === */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+    header {
+      background: #006b3c;
+      color: white;
+      padding: 20px 15px;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 2em; }
+    header p { margin: 5px 0 0; font-size: 1.1em; }
+    .ticker {
+      background: #00994d;
+      color: #ffd700;
+      font-weight: bold;
+      padding: 8px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll 18s linear infinite;
+    }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+    nav {
+      background: #00994d;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .nav-left, .nav-right { display: flex; flex-wrap: nowrap; }
+    nav a {
+      color: white; text-decoration: none; padding: 14px 20px;
+      display: inline-block; font-weight: bold;
+    }
+    nav a:hover { background: #007a40; color: #ffd700; }
+    main {
+      display: flex; flex-wrap: wrap; gap: 20px;
+      padding: 20px; max-width: 1200px; margin: auto;
+    }
+    .content {
+      flex: 3; background: white; padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    article { margin-bottom: 25px; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
+    article h2 { color: #006b3c; margin-bottom: 10px; }
+    article h2:hover { color: #ffd700; cursor: pointer; }
+    article p { line-height: 1.6; white-space: pre-wrap; }
+    .sidebar {
+      flex: 1; background: #fff; padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1); height: fit-content;
+    }
+    .sidebar h3 {
+      color: #006b3c; margin-bottom: 15px;
+      border-bottom: 2px solid #ffd700; padding-bottom: 5px;
+    }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar li { margin-bottom: 10px; }
+    .sidebar a {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .sidebar a:hover { color: #ffd700; }
+    .about {
+      text-align: center; padding: 30px 15px;
+      background: #e6f4ec; margin: 30px auto; max-width: 1200px;
+    }
+    .about img {
+      width: 130px; height: 130px; border-radius: 50%;
+      margin-bottom: 15px; border: 3px solid #ffd700;
+    }
+    .about h2 { margin-bottom: 10px; color: #006b3c; }
+    .about p { margin: 5px 0; }
+    footer {
+      text-align: center; padding: 15px; background: #006b3c;
+      color: white; margin-top: 20px; font-size: 0.9em;
+    }
+    footer span { color: #ffd700; }
+    .read-more-link {
+      color: #006b3c;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .read-more-link:hover { text-decoration: underline; }
+    @media (max-width: 900px) {
+      main { flex-direction: column; }
+      .sidebar { order: -1; }
+      nav { flex-direction: column; align-items: center; }
+      .nav-left, .nav-right { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>The Prime Post</h1>
+  <p>Your Source for Trusted Trending News</p>
+</header>
+
+<div class="ticker">
+  <span id="ticker-span">Loading ticker...</span>
+</div>
+
+<nav>
+  <div class="nav-left">
+    <a href="#">Home</a>
+    <a href="#">Politics</a>
+    <a href="#">Education</a>
+  </div>
+  <div class="nav-right">
+    <a href="#">Business</a>
+    <a href="#">Sports</a>
+    <a href="#">About Us</a>
+  </div>
+</nav>
+
+<main>
+  <div class="content"></div>
+
+  <aside class="sidebar">
+    <h3>Latest Stories</h3>
+    <ul></ul>
+  </aside>
+</main>
+
+<section class="about">
+  <img src="jackson.png" alt="Jack Otong'o">
+  <h2>About Us</h2>
+  <p><strong>Jack Otong'o</strong></p>
+  <p><strong>Email:</strong> jacksoduori@gmail.com</p>
+  <p><strong>Phone:</strong> 0725475336</p>
+</section>
+
+<footer>
+  <p>&copy; 2025 <span>Prime Post</span> | Maintained by Otong'o Media</p>
+</footer>
+
+<script>
+const sheetCsv = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0r_06emfY3q-DDviZJ0osojgBlleOFusWuvu7BLgck-TS7Rk1c4ugtwQHb2hPUmcdIQQi469WS3K9/pub?output=csv";
+const proxy = "https://api.allorigins.win/raw?url=";
+const sheetURL = proxy + encodeURIComponent(sheetCsv);
+
+function parseCSV(text) {
+  const rows = [];
+  let currentRow = [];
+  let currentCell = '';
+  let insideQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const next = text[i+1];
+    if (ch === '"') {
+      if (insideQuotes && next === '"') { currentCell += '"'; i++; }
+      else { insideQuotes = !insideQuotes; }
+      continue;
+    }
+    if (ch === ',' && !insideQuotes) {
+      currentRow.push(currentCell);
+      currentCell = '';
+      continue;
+    }
+    if ((ch === '\n' || ch === '\r') && !insideQuotes) {
+      if (ch === '\r' && text[i+1] === '\n') i++;
+      currentRow.push(currentCell);
+      rows.push(currentRow);
+      currentRow = [];
+      currentCell = '';
+      continue;
+    }
+    currentCell += ch;
+  }
+  if (currentCell !== '' || currentRow.length > 0) {
+    currentRow.push(currentCell);
+    rows.push(currentRow);
+  }
+  return rows;
+}
+
+function normalizeHeader(h){ return String(h||'').trim().toLowerCase(); }
+
+function mapRowsToObjects(rows){
+  if(!rows || rows.length===0) return [];
+  const header = rows[0].map(h => normalizeHeader(h));
+  const dataRows = rows.slice(1);
+  return dataRows.map(r=>{
+    const obj = {};
+    for(let i=0;i<header.length;i++){
+      obj[header[i]] = (r[i]!==undefined) ? r[i].trim() : '';
+    }
+    return obj;
+  }).filter(o => Object.keys(o).length>0 && (o.title||o.heading||o.content||o.ticker));
+}
+
+function makePreview(fullText, wordLimit){
+  if(!fullText) return '';
+  const words = fullText.split(/\s+/).filter(Boolean);
+  if(words.length <= wordLimit) return fullText;
+  return words.slice(0, wordLimit).join(' ');
+}
+
+async function loadArticles() {
+  const contentContainer = document.querySelector('.content');
+  const sidebarContainer = document.querySelector('.sidebar ul');
+  const tickerSpan = document.getElementById('ticker-span');
+
+  contentContainer.innerHTML = '<p>Loading articles...</p>';
+  sidebarContainer.innerHTML = '';
+  tickerSpan.textContent = 'Loading ticker...';
+
+  try {
+    const res = await fetch(sheetURL, { cache: 'no-store' });
+    if(!res.ok) throw new Error('Network response not ok: ' + res.status);
+    const text = await res.text();
+
+    const rows = parseCSV(text);
+    if(!rows || rows.length < 2) {
+      contentContainer.innerHTML = '<p>No articles found in sheet (check headers & rows).</p>';
+      tickerSpan.textContent = 'No ticker available';
+      return;
+    }
+
+    const objects = mapRowsToObjects(rows);
+    const headerLower = rows[0].map(h => normalizeHeader(h));
+    const titleHeader = headerLower.find(h => ['title','headline','heading'].includes(h)) || headerLower[1] || headerLower[0];
+    const contentHeader = headerLower.find(h => ['content','body','article','text'].includes(h)) || headerLower[2] || titleHeader;
+
+    contentContainer.innerHTML = '';
+    sidebarContainer.innerHTML = '';
+
+    objects.forEach((obj, index) => {
+      const idVal = (obj.id && obj.id !== '') ? obj.id : (index + 1);
+      const titleVal = obj[titleHeader] || 'Untitled';
+      const contentVal = obj[contentHeader] || '';
+
+      const articleEl = document.createElement('article');
+      articleEl.id = `article-${idVal}`;
+
+      const titleEl = document.createElement('h2');
+      titleEl.textContent = titleVal;
+
+      const p = document.createElement('p');
+      p.style.whiteSpace = 'pre-wrap';
+
+      const fullText = contentVal;
+      const previewText = makePreview(fullText, 30);
+
+      if(fullText && fullText.split(/\s+/).filter(Boolean).length > 30) {
+        p.textContent = previewText + '... ';
+        const link = document.createElement('a');
+        link.className = 'read-more-link';
+        link.textContent = 'Read More';
+        link.href = 'javascript:void(0)';
+        link.dataset.expanded = 'false';
+
+        link.addEventListener('click', function(e){
+          e.preventDefault();
+          const expanded = this.dataset.expanded === 'true';
+          if(!expanded){
+            p.textContent = fullText + ' ';
+            this.textContent = 'Read Less';
+            this.dataset.expanded = 'true';
+            p.appendChild(this);
+          } else {
+            p.textContent = previewText + '... ';
+            this.textContent = 'Read More';
+            this.dataset.expanded = 'false';
+            p.appendChild(this);
+          }
+        });
+
+        p.appendChild(link);
+      } else {
+        p.textContent = fullText;
+      }
+
+      articleEl.appendChild(titleEl);
+      articleEl.appendChild(p);
+      contentContainer.appendChild(articleEl);
+
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.textContent = titleVal;
+      a.href = `#article-${idVal}`;
+      li.appendChild(a);
+      sidebarContainer.appendChild(li);
+    });
+
+    const tickerItems = [];
+    for(let r=1; r<rows.length; r++){
+      const tick = (rows[r][3] !== undefined) ? rows[r][3].trim() : '';
+      if(tick) tickerItems.push(tick);
+    }
+    tickerSpan.textContent = tickerItems.length ? tickerItems.join(' | ') : 'No ticker items';
+
+  } catch (err) {
+    console.error('Failed to load sheet:', err);
+    contentContainer.innerHTML = '<p>Failed to load articles. Confirm the sheet is published to web and public, then reload.</p>';
+    tickerSpan.textContent = 'Failed to load ticker';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadArticles);
+</script>
+
+</body>
+</html>
