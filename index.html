@@ -5,184 +5,55 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Prime Post - Trusted Trending News</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f4f9;
-      color: #333;
-      scroll-behavior: smooth;
-    }
-    header {
-      background: #006b3c;
-      color: white;
-      padding: 20px 15px;
-      text-align: center;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f9; color: #333; scroll-behavior: smooth; }
+    header { background: #006b3c; color: white; padding: 20px 15px; text-align: center; position: fixed; top: 0; width: 100%; z-index: 1000; }
     header h1 { margin: 0; font-size: 2em; }
     header p { margin: 5px 0 0; font-size: 1.1em; }
 
-    .ticker {
-      background: #00994d;
-      color: #ffd700;
-      font-weight: bold;
-      padding: 8px;
-      overflow: hidden;
-      white-space: nowrap;
-      position: fixed;
-      top: 95px;
-      width: 100%;
-      z-index: 999;
-    }
-    .ticker span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll 45s linear infinite;
-    }
-    @keyframes scroll { 
-      0% { transform: translateX(0); } 
-      100% { transform: translateX(-100%); } 
-    }
+    .ticker { background: #00994d; color: #ffd700; font-weight: bold; padding: 8px; overflow: hidden; white-space: nowrap; position: fixed; top: 95px; width: 100%; z-index: 999; }
+    .ticker span { display: inline-block; padding-left: 100%; animation: scroll 45s linear infinite; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-    nav {
-      background: #00994d;
-      position: fixed;
-      top: 126px;
-      width: 100%;
-      z-index: 998;
-      display: flex;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .nav-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      padding: 10px 0;
-      flex-wrap: wrap;
-      max-width: 1200px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1em;
-      padding: 10px 18px;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    nav a:hover {
-      background: #007a40;
-      color: #ffd700;
-    }
+    nav { background: #00994d; position: fixed; top: 126px; width: 100%; z-index: 998; display: flex; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .nav-container { display: flex; justify-content: center; align-items: center; gap: 30px; padding: 10px 0; flex-wrap: wrap; max-width: 1200px; }
+    nav a { color: white; text-decoration: none; font-weight: bold; font-size: 1em; padding: 10px 18px; border-radius: 5px; transition: all 0.3s ease; cursor: pointer; }
+    nav a:hover { background: #007a40; color: #ffd700; }
+    nav a.active { background: #ffd700; color: #006b3c; }
 
     @media (max-width: 900px) {
-      .nav-container {
-        flex-wrap: wrap;
-        gap: 15px;
-        padding: 12px;
-      }
-      nav a {
-        padding: 10px 14px;
-        font-size: 0.95em;
-      }
+      .nav-container { flex-wrap: wrap; gap: 15px; padding: 12px; }
+      nav a { padding: 10px 14px; font-size: 0.95em; }
     }
 
-    .scroll-section {
-      margin-top: 200px;
-      height: calc(100vh - 270px);
-      overflow-y: auto;
-      scroll-behavior: smooth;
-    }
+    .scroll-section { margin-top: 200px; height: calc(100vh - 270px); overflow-y: auto; scroll-behavior: smooth; }
 
-    main {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding: 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .content {
-      flex: 3;
-      background: white;
-      padding: 20px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    }
-    article { 
-      margin-bottom: 25px; 
-      border-bottom: 1px solid #ccc; 
-      padding-bottom: 15px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    }
-    article.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    main { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
+    .content { flex: 3; background: white; padding: 20px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    article { margin-bottom: 25px; border-bottom: 1px solid #ccc; padding-bottom: 15px; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+    article.visible { opacity: 1; transform: translateY(0); }
     article h2 { color: #006b3c; margin-bottom: 10px; }
     article h2:hover { color: #ffd700; cursor: pointer; }
-    article p { line-height: 1.6; white-space: pre-wrap; font-weight: bold; font-size: 1.05em; }
-    .sidebar {
-      flex: 1;
-      background: #fff;
-      padding: 20px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      height: fit-content;
-    }
-    .sidebar h3 {
-      color: #006b3c;
-      margin-bottom: 15px;
-      border-bottom: 2px solid #ffd700;
-      padding-bottom: 5px;
-    }
+    article p { line-height: 1.6; white-space: pre-wrap; font-weight: normal; font-size: 1.05em; }
+    article img { width: 100%; max-height: 350px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; display: block; opacity: 0; transition: opacity 1.5s ease-in; }
+    article img.loaded { opacity: 1; }
+
+    .sidebar { flex: 1; background: #fff; padding: 20px; box-shadow: 0 0 8px rgba(0,0,0,0.1); height: fit-content; }
+    .sidebar h3 { color: #006b3c; margin-bottom: 15px; border-bottom: 2px solid #ffd700; padding-bottom: 5px; }
     .sidebar ul { list-style: none; padding: 0; }
     .sidebar li { margin-bottom: 10px; }
-    .sidebar a {
-      color: #333;
-      text-decoration: none;
-      font-weight: bold;
-    }
+    .sidebar a { color: #333; text-decoration: none; font-weight: bold; }
     .sidebar a:hover { color: #ffd700; }
-    .about {
-      text-align: center;
-      padding: 30px 15px;
-      background: #e6f4ec;
-      margin: 30px auto;
-      max-width: 1200px;
-    }
-    .about img {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      margin-bottom: 15px;
-      border: 3px solid #ffd700;
-    }
+
+    .about { text-align: center; padding: 30px 15px; background: #e6f4ec; margin: 30px auto; max-width: 1200px; }
+    .about img { width: 130px; height: 130px; border-radius: 50%; margin-bottom: 15px; border: 3px solid #ffd700; }
     .about h2 { margin-bottom: 10px; color: #006b3c; }
-    .about p { margin: 5px 0; }
-    footer {
-      text-align: center;
-      padding: 15px;
-      background: #006b3c;
-      color: white;
-      margin-top: 20px;
-      font-size: 0.9em;
-    }
+
+    footer { text-align: center; padding: 15px; background: #006b3c; color: white; margin-top: 20px; font-size: 0.9em; }
     footer span { color: #ffd700; }
-    .read-more-link {
-      color: #006b3c;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-    }
+
+    .read-more-link { color: #006b3c; font-weight: bold; cursor: pointer; text-decoration: none; }
     .read-more-link:hover { text-decoration: underline; }
+
     @media (max-width: 900px) {
       main { flex-direction: column; }
       .sidebar { order: -1; }
@@ -196,13 +67,11 @@
   <p>Your Source for Trusted Trending News</p>
 </header>
 
-<div class="ticker">
-  <span id="ticker-span">Loading ticker...</span>
-</div>
+<div class="ticker"><span id="ticker-span">Loading ticker...</span></div>
 
 <nav>
   <div class="nav-container">
-    <a data-category="Home">Home</a>
+    <a data-category="Home" class="active">Home</a>
     <a data-category="Politics">Politics</a>
     <a data-category="Education">Education</a>
     <a data-category="Economics">Economics</a>
@@ -214,10 +83,7 @@
 <div class="scroll-section">
   <main>
     <div class="content"></div>
-    <aside class="sidebar">
-      <h3>Latest Stories</h3>
-      <ul></ul>
-    </aside>
+    <aside class="sidebar"><h3>Latest Stories</h3><ul></ul></aside>
   </main>
 
   <section class="about">
@@ -234,115 +100,88 @@
 </footer>
 
 <script>
-const sheetCsv = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0r_06emfY3q-DDviZJ0osojgBlleOFusWuvu7BLgck-TS7Rk1c4ugtwQHb2hPUmcdIQQi469WS3K9/pub?output=csv";
-const proxy = "https://api.codetabs.com/v1/proxy?quest=";
-const sheetURL = proxy + encodeURIComponent(sheetCsv);
-let allArticles = [];
+const sheetCsv="https://docs.google.com/spreadsheets/d/e/2PACX-1vS0r_06emfY3q-DDviZJ0osojgBlleOFusWuvu7BLgck-TS7Rk1c4ugtwQHb2hPUmcdIQQi469WS3K9/pub?output=csv";
+const proxy="https://api.codetabs.com/v1/proxy?quest=";
+const sheetURL=proxy+encodeURIComponent(sheetCsv);
+let allArticles=[];
 
-function parseCSV(text){
-  const rows=[],current=[],c='';let cell='',quote=false;
-  for(let i=0;i<text.length;i++){
-    const ch=text[i],n=text[i+1];
-    if(ch==='"'){if(quote&&n==='"'){cell+='"';i++;}else quote=!quote;continue;}
-    if(ch===','&&!quote){current.push(cell);cell='';continue;}
-    if((ch==='\n'||ch==='\r')&&!quote){if(ch==='\r'&&text[i+1]==='\n')i++;current.push(cell);rows.push([...current]);current.length=0;cell='';continue;}
-    cell+=ch;
-  }
-  if(cell||current.length){current.push(cell);rows.push(current);}
-  return rows;
-}
-
+function parseCSV(text){const rows=[],cur=[],c='';let cell='',q=false;for(let i=0;i<text.length;i++){const ch=text[i],n=text[i+1];if(ch==='"'){if(q&&n==='"'){cell+='"';i++;}else q=!q;continue;}if(ch===','&&!q){cur.push(cell);cell='';continue;}if((ch==='\n'||ch==='\r')&&!q){if(ch==='\r'&&text[i+1]==='\n')i++;cur.push(cell);rows.push([...cur]);cur.length=0;cell='';continue;}cell+=ch;}if(cell||cur.length){cur.push(cell);rows.push(cur);}return rows;}
 function normalizeHeader(h){return (h||'').trim().toLowerCase();}
-
-function mapRowsToObjects(rows){
-  if(!rows.length)return[];
-  const head=rows[0].map(h=>normalizeHeader(h)),data=rows.slice(1);
-  return data.map(r=>{
-    const o={};for(let i=0;i<head.length;i++)o[head[i]]=r[i]?r[i].trim():'';
-    return o;
-  }).filter(o=>o.title||o.content||o.ticker);
-}
-
-function makePreview(t,l){const w=t.split(/\s+/);return w.length<=l?t:w.slice(0,l).join(' ')}
+function mapRowsToObjects(rows){if(!rows.length)return[];const head=rows[0].map(h=>normalizeHeader(h)),data=rows.slice(1);return data.map(r=>{const o={};for(let i=0;i<head.length;i++)o[head[i]]=r[i]?r[i].trim():'';return o;}).filter(o=>o.title||o.content);}
+function makePreview(t,l){const w=t.split(/\s+/);return w.length<=l?t:w.slice(0,l).join(' ');}
 
 async function loadArticles(){
-  const content=document.querySelector('.content');
-  const sidebar=document.querySelector('.sidebar ul');
-  const ticker=document.getElementById('ticker-span');
-  content.innerHTML='<p>Loading articles...</p>';
+  const c=document.querySelector('.content');
+  const s=document.querySelector('.sidebar ul');
+  const t=document.getElementById('ticker-span');
+  c.innerHTML='<p>Loading articles...</p>';
   try{
     const res=await fetch(sheetURL,{cache:'no-store'});
     const txt=await res.text();
     const rows=parseCSV(txt);
     const objs=mapRowsToObjects(rows);
-    allArticles=objs;
+    allArticles=objs.reverse();
     displayArticles('Home');
     const ticks=[];
-    for(let i=1;i<rows.length;i++){
-      const t=rows[i][3]?rows[i][3].trim():'';
-      if(t)ticks.push(t);
-    }
-    ticker.textContent=ticks.length?ticks.join(' | '):'No ticker';
-  }catch(e){
-    content.innerHTML='<p>Failed to load articles.</p>';
-    console.error(e);
-  }
+    for(let i=1;i<rows.length;i++){const tick=rows[i][3]?rows[i][3].trim():'';if(tick)ticks.push(tick);}
+    t.textContent=ticks.length?ticks.join(' | '):'No ticker';
+  }catch(e){c.innerHTML='<p>Failed to load articles.</p>';console.error(e);}
 }
 
-function displayArticles(category){
-  const content=document.querySelector('.content');
-  const sidebar=document.querySelector('.sidebar ul');
-  content.innerHTML='';
-  sidebar.innerHTML='';
-  let articles=allArticles;
-  if(category!=='Home'){
-    articles=articles.filter(a=>a.category&&a.category.toLowerCase()===category.toLowerCase());
-  }else{
-    articles=articles.slice(0,10);
-  }
-  articles.forEach((a,i)=>{
+function displayArticles(cat){
+  const c=document.querySelector('.content'),s=document.querySelector('.sidebar ul');
+  c.innerHTML='';s.innerHTML='';
+  let arts=allArticles;
+  if(cat!=='Home')arts=arts.filter(a=>a.category&&a.category.toLowerCase()===cat.toLowerCase());
+  else arts=arts.slice(0,10);
+  arts.forEach((a,i)=>{
     const id=i+1;
     const art=document.createElement('article');
     art.id='article-'+id;
     const title=document.createElement('h2');
     title.textContent=a.title||'Untitled';
+    const img=a.image?a.image.trim():'';
+    if(img){
+      const im=document.createElement('img');
+      im.dataset.src=img;
+      im.loading='lazy';
+      im.addEventListener('load',()=>im.classList.add('loaded'));
+      art.append(im);
+    }
     const p=document.createElement('p');
-    const full=a.content||'';
-    const short=makePreview(full,30);
+    const full=a.content||'',short=makePreview(full,30);
     if(full.split(/\s+/).length>30){
       p.textContent=short+'... ';
       const link=document.createElement('a');
-      link.className='read-more-link';
-      link.textContent='Read More';
-      link.href='javascript:void(0)';
-      link.onclick=()=>{
-        const expanded=link.textContent==='Read Less';
-        p.textContent=expanded?short+'... ':full+' ';
-        link.textContent=expanded?'Read More':'Read Less';
-        p.appendChild(link);
-      };
+      link.className='read-more-link';link.textContent='Read More';link.href='javascript:void(0)';
+      link.onclick=()=>{const ex=link.textContent==='Read Less';p.textContent=ex?short+'... ':full+' ';link.textContent=ex?'Read More':'Read Less';p.appendChild(link);};
       p.appendChild(link);
     }else p.textContent=full;
     art.append(title,p);
-    content.append(art);
-    const li=document.createElement('li');
-    const sa=document.createElement('a');
-    sa.textContent=a.title;
-    sa.href='#article-'+id;
-    li.append(sa);
-    sidebar.append(li);
+    c.append(art);
+    const li=document.createElement('li');const sa=document.createElement('a');sa.textContent=a.title;sa.href='#article-'+id;li.append(sa);s.append(li);
   });
-  const arts=document.querySelectorAll('article');
   const obs=new IntersectionObserver(es=>{
-    es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        const im=e.target.querySelector('img[data-src]');
+        if(im&&!im.src)im.src=im.dataset.src;
+      }
+    });
   },{threshold:0.1});
-  arts.forEach(a=>obs.observe(a));
+  document.querySelectorAll('article').forEach(a=>obs.observe(a));
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
   loadArticles();
-  document.querySelectorAll('nav a').forEach(a=>{
-    a.addEventListener('click',()=>displayArticles(a.dataset.category));
+  const navLinks=document.querySelectorAll('nav a');
+  navLinks.forEach(a=>{
+    a.addEventListener('click',()=>{
+      navLinks.forEach(n=>n.classList.remove('active'));
+      a.classList.add('active');
+      displayArticles(a.dataset.category);
+    });
   });
 });
 </script>
