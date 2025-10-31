@@ -1,331 +1,350 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Prime Post — Card Creator</title>
-<style>
-  :root{
-    --green:#006b3c;
-    --green-2:#00994d;
-    --gold:#ffd700;
-    --white:#ffffff;
-    --light-green:#c9f7df;
-  }
-  body{
-    font-family: Arial, Helvetica, sans-serif;
-    margin:16px;
-    background:#f4f4f9;
-    color:#222;
-  }
-  .container{
-    max-width:900px;
-    margin:0 auto;
-    display:grid;
-    grid-template-columns:1fr 420px;
-    gap:18px;
-    align-items:start;
-  }
-  h1{ margin:0 0 12px 0; color:var(--green); font-size:20px; }
-  p.small{ margin:6px 0 14px 0; color:#444; font-size:13px; }
-  .panel{
-    background:#fff;
-    padding:14px;
-    border-radius:8px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.06);
-  }
-  .form-row{ margin-bottom:10px; }
-  label{ display:block; font-weight:bold; color:var(--green); margin-bottom:6px; font-size:13px; }
-  input[type="text"], textarea, input[type="url"]{
-    width:100%;
-    padding:8px 10px;
-    border:1px solid #ddd;
-    border-radius:6px;
-    font-size:14px;
-    box-sizing:border-box;
-  }
-  textarea{ min-height:90px; resize:vertical; }
-  input[type="file"]{ font-size:13px; }
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Prime Post - Trusted Trending News</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+    header {
+      background: #006b3c;
+      color: white;
+      padding: 20px 15px;
+      text-align: center;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    header h1 { margin: 0; font-size: 2em; }
+    header p { margin: 5px 0 0; font-size: 1.1em; }
 
-  .btn{
-    display:inline-block;
-    background:var(--green);
-    color:var(--white);
-    padding:10px 14px;
-    border-radius:8px;
-    text-decoration:none;
-    cursor:pointer;
-    border:none;
-    font-weight:bold;
-  }
-  .btn.secondary{
-    background:#eee;
-    color:#222;
-    border:1px solid #ddd;
-    margin-left:8px;
-  }
+    .ticker {
+      background: #00994d;
+      color: #ffd700;
+      font-weight: bold;
+      padding: 8px;
+      overflow: hidden;
+      white-space: nowrap;
+      position: fixed;
+      top: 95px;
+      width: 100%;
+      z-index: 999;
+    }
+    .ticker span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll 45s linear infinite;
+    }
+    @keyframes scroll { 
+      0% { transform: translateX(0); } 
+      100% { transform: translateX(-100%); } 
+    }
 
-  .preview-wrap{
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-    flex-direction:column;
-  }
-  .card-preview{
-    width:320px;
-    height:280px;
-    border-radius:10px;
-    overflow:hidden;
-    position:relative;
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);
-    background:linear-gradient(180deg,var(--green) 0%, var(--green-2) 100%);
-    color:var(--white);
-    padding:14px;
-    box-sizing:border-box;
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end; /* moved text to bottom */
-  }
+    nav {
+      background: #00994d;
+      position: fixed;
+      top: 126px;
+      width: 100%;
+      z-index: 998;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding: 10px 0;
+      flex-wrap: wrap;
+      max-width: 1200px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1em;
+      padding: 10px 18px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    nav a:hover {
+      background: #007a40;
+      color: #ffd700;
+    }
 
-  /* Added logo section */
-  .card-top{
-    position:absolute;
-    top:10px;
-    left:12px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .pp-logo{
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    background:var(--light-green);
-    border:2px solid var(--gold);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-    font-size:18px;
-    color:black;
-    text-shadow:0 0 2px rgba(0,0,0,0.3);
-  }
-  .pp-text{
-    font-weight:bold;
-    color:var(--gold);
-    font-size:15px;
-  }
+    @media (max-width: 900px) {
+      .nav-container {
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 12px;
+      }
+      nav a {
+        padding: 10px 14px;
+        font-size: 0.95em;
+      }
+    }
 
-  .card-title{ font-size:16px; font-weight:bold; margin:8px 0 0 0; color:#fff; line-height:1.1; }
-  .card-desc{ font-size:15px; font-weight:bold; opacity:0.98; margin-top:6px; color:#fff; }
-  .card-link{ font-size:12px; margin-top:8px; color:var(--gold); font-weight:bold; text-decoration:underline; }
+    .scroll-section {
+      margin-top: 200px;
+      height: calc(100vh - 270px);
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
 
-  .watermark{
-    position:absolute;
-    left:-30px;
-    top:50%;
-    transform:rotate(-30deg) translateY(-50%);
-    font-size:34px;
-    color:rgba(255,255,255,0.06);
-    font-weight:bold;
-    pointer-events:none;
-    user-select:none;
-    white-space:nowrap;
-  }
-
-  .note{ font-size:12px; color:#666; margin-top:8px; }
-  .actions{ margin-top:10px; display:flex; gap:8px; align-items:center; }
-
-  @media (max-width:980px){
-    .container{ grid-template-columns:1fr; }
-    .card-preview{ width:100%; max-width:360px; height:300px; margin:auto; }
-  }
-</style>
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .content {
+      flex: 3;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    article { 
+      margin-bottom: 25px; 
+      border-bottom: 1px solid #ccc; 
+      padding-bottom: 15px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    article.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    article h2 { color: #006b3c; margin-bottom: 10px; }
+    article h2:hover { color: #ffd700; cursor: pointer; }
+    article p { line-height: 1.6; white-space: pre-wrap; font-weight: bold; font-size: 1.05em; }
+    .sidebar {
+      flex: 1;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+    .sidebar h3 {
+      color: #006b3c;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #ffd700;
+      padding-bottom: 5px;
+    }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar li { margin-bottom: 10px; }
+    .sidebar a {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .sidebar a:hover { color: #ffd700; }
+    .about {
+      text-align: center;
+      padding: 30px 15px;
+      background: #e6f4ec;
+      margin: 30px auto;
+      max-width: 1200px;
+    }
+    .about img {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      border: 3px solid #ffd700;
+    }
+    .about h2 { margin-bottom: 10px; color: #006b3c; }
+    .about p { margin: 5px 0; }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #006b3c;
+      color: white;
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+    footer span { color: #ffd700; }
+    .read-more-link {
+      color: #006b3c;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .read-more-link:hover { text-decoration: underline; }
+    @media (max-width: 900px) {
+      main { flex-direction: column; }
+      .sidebar { order: -1; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="panel">
-    <h1>Prime Post Card Creator</h1>
-    <p class="small">Upload an image, enter title, short text and link. Click "Render" then "Download PNG".</p>
+<header>
+  <h1>The Prime Post</h1>
+  <p>Your Source for Trusted Trending News</p>
+</header>
 
-    <div class="form-row">
-      <label for="image">Image (feature image)</label>
-      <input id="image" type="file" accept="image/*">
-    </div>
-
-    <div class="form-row">
-      <label for="title">Title</label>
-      <input id="title" type="text" placeholder="Enter headline (example: Caretaker or Commander? ... )">
-    </div>
-
-    <div class="form-row">
-      <label for="desc">Short text (preview)</label>
-      <textarea id="desc" placeholder="Short summary for the card (max ~30-40 words)"></textarea>
-    </div>
-
-    <div class="form-row">
-      <label for="link">Article link (optional)</label>
-      <input id="link" type="url" placeholder="https://...">
-    </div>
-
-    <div class="actions">
-      <button class="btn" id="renderBtn">Render</button>
-      <button class="btn secondary" id="downloadBtn" disabled>Download PNG</button>
-      <button class="btn secondary" id="resetBtn">Reset</button>
-    </div>
-
-    <p class="note">Tip: keep title short so it fits well on the card.</p>
-  </div>
-
-  <div class="preview-wrap">
-    <div class="panel">
-      <div class="card-preview" id="cardPreview">
-        <div class="card-top">
-          <div class="pp-logo">PP</div>
-          <div class="pp-text">The PrimePost</div>
-        </div>
-        <div class="watermark">PRIME POST</div>
-        <div>
-          <div class="card-title" id="cardTitle">Card title will appear here</div>
-          <div class="card-desc" id="cardDesc">Short description will appear here — keep it short for best results.</div>
-        </div>
-        <div>
-          <div class="card-link" id="cardLink">primepost.co.ke</div>
-        </div>
-      </div>
-    </div>
-
-    <canvas id="cardCanvas" width="1200" height="630" style="display:none;"></canvas>
-  </div>
+<div class="ticker">
+  <span id="ticker-span">Loading ticker...</span>
 </div>
 
+<nav>
+  <div class="nav-container">
+    <a data-category="Home">Home</a>
+    <a data-category="Politics">Politics</a>
+    <a data-category="Education">Education</a>
+    <a data-category="Economics">Economics</a>
+    <a data-category="Sportainment">Sportainment</a>
+    <a data-category="Opinion">Opinion</a>
+  </div>
+</nav>
+
+<div class="scroll-section">
+  <main>
+    <div class="content"></div>
+    <aside class="sidebar">
+      <h3>Latest Stories</h3>
+      <ul></ul>
+    </aside>
+  </main>
+
+  <section class="about">
+    <img src="primepost.png" alt="LOGO">
+    <h2>About Us</h2>
+    <p><strong>CONTACT US</strong></p>
+    <p><strong>Email:</strong> primepost.ke@gmail.com</p>
+    <p><strong>Phone:</strong> 0738167804</p>
+  </section>
+</div>
+
+<footer>
+  <p>&copy; 2025 <span>Prime Post</span> | Maintained by Smartlands Media Solutions</p>
+</footer>
+
 <script>
-const imageInput = document.getElementById('image');
-const titleInput = document.getElementById('title');
-const descInput = document.getElementById('desc');
-const linkInput = document.getElementById('link');
-const renderBtn = document.getElementById('renderBtn');
-const downloadBtn = document.getElementById('downloadBtn');
-const resetBtn = document.getElementById('resetBtn');
-const cardTitle = document.getElementById('cardTitle');
-const cardDesc = document.getElementById('cardDesc');
-const cardLink = document.getElementById('cardLink');
-const cardPreview = document.getElementById('cardPreview');
-const canvas = document.getElementById('cardCanvas');
-const ctx = canvas.getContext('2d');
-let uploadedImage = null;
+const sheetCsv = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0r_06emfY3q-DDviZJ0osojgBlleOFusWuvu7BLgck-TS7Rk1c4ugtwQHb2hPUmcdIQQi469WS3K9/pub?output=csv";
+const proxy = "https://api.codetabs.com/v1/proxy?quest=";
+const sheetURL = proxy + encodeURIComponent(sheetCsv);
+let allArticles = [];
 
-function updatePreview(){
-  cardTitle.textContent = titleInput.value.trim() || 'Card title will appear here';
-  cardDesc.textContent = descInput.value.trim() || 'Short description will appear here — keep it short for best results.';
-  cardLink.textContent = linkInput.value.trim() || 'primepost.co.ke';
-  if(uploadedImage){
-    cardPreview.style.backgroundImage = `url(${uploadedImage.src})`;
-    cardPreview.style.backgroundSize = 'cover';
-    cardPreview.style.backgroundPosition = 'center';
-  } else {
-    cardPreview.style.backgroundImage = '';
-    cardPreview.style.background = 'linear-gradient(180deg, var(--green) 0%, var(--green-2) 100%)';
+function parseCSV(text){
+  const rows=[],current=[],c='';let cell='',quote=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i],n=text[i+1];
+    if(ch==='"'){if(quote&&n==='"'){cell+='"';i++;}else quote=!quote;continue;}
+    if(ch===','&&!quote){current.push(cell);cell='';continue;}
+    if((ch==='\n'||ch==='\r')&&!quote){if(ch==='\r'&&text[i+1]==='\n')i++;current.push(cell);rows.push([...current]);current.length=0;cell='';continue;}
+    cell+=ch;
+  }
+  if(cell||current.length){current.push(cell);rows.push(current);}
+  return rows;
+}
+
+function normalizeHeader(h){return (h||'').trim().toLowerCase();}
+
+function mapRowsToObjects(rows){
+  if(!rows.length)return[];
+  const head=rows[0].map(h=>normalizeHeader(h)),data=rows.slice(1);
+  return data.map(r=>{
+    const o={};for(let i=0;i<head.length;i++)o[head[i]]=r[i]?r[i].trim():'';
+    return o;
+  }).filter(o=>o.title||o.content||o.ticker);
+}
+
+function makePreview(t,l){const w=t.split(/\s+/);return w.length<=l?t:w.slice(0,l).join(' ')}
+
+async function loadArticles(){
+  const content=document.querySelector('.content');
+  const sidebar=document.querySelector('.sidebar ul');
+  const ticker=document.getElementById('ticker-span');
+  content.innerHTML='<p>Loading articles...</p>';
+  try{
+    const res=await fetch(sheetURL,{cache:'no-store'});
+    const txt=await res.text();
+    const rows=parseCSV(txt);
+    const objs=mapRowsToObjects(rows);
+    allArticles=objs;
+    displayArticles('Home');
+    const ticks=[];
+    for(let i=1;i<rows.length;i++){
+      const t=rows[i][3]?rows[i][3].trim():'';
+      if(t)ticks.push(t);
+    }
+    ticker.textContent=ticks.length?ticks.join(' | '):'No ticker';
+  }catch(e){
+    content.innerHTML='<p>Failed to load articles.</p>';
+    console.error(e);
   }
 }
 
-imageInput.addEventListener('change', e=>{
-  const f = e.target.files && e.target.files[0];
-  if(!f) return;
-  const reader = new FileReader();
-  reader.onload = ev=>{
-    const img = new Image();
-    img.onload = ()=>{ uploadedImage = img; updatePreview(); };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(f);
-});
-
-resetBtn.addEventListener('click', ()=>{
-  titleInput.value=''; descInput.value=''; linkInput.value=''; imageInput.value='';
-  uploadedImage=null; cardPreview.style.backgroundImage='';
-  updatePreview(); downloadBtn.disabled=true;
-});
-
-function wrapText(ctx, text, x, y, maxWidth, lineHeight){
-  const words=text.split(' '); let line='';
-  for(let n=0;n<words.length;n++){
-    const testLine=line+words[n]+' ';
-    if(ctx.measureText(testLine).width>maxWidth && n>0){
-      ctx.fillText(line,x,y); line=words[n]+' '; y+=lineHeight;
-    } else line=testLine;
+function displayArticles(category){
+  const content=document.querySelector('.content');
+  const sidebar=document.querySelector('.sidebar ul');
+  content.innerHTML='';
+  sidebar.innerHTML='';
+  let articles=allArticles;
+  if(category!=='Home'){
+    articles=articles.filter(a=>a.category&&a.category.toLowerCase()===category.toLowerCase());
+  }else{
+    articles=articles.slice(0,10);
   }
-  ctx.fillText(line,x,y); return y;
+  articles.forEach((a,i)=>{
+    const id=i+1;
+    const art=document.createElement('article');
+    art.id='article-'+id;
+    const title=document.createElement('h2');
+    title.textContent=a.title||'Untitled';
+    const p=document.createElement('p');
+    const full=a.content||'';
+    const short=makePreview(full,30);
+    if(full.split(/\s+/).length>30){
+      p.textContent=short+'... ';
+      const link=document.createElement('a');
+      link.className='read-more-link';
+      link.textContent='Read More';
+      link.href='javascript:void(0)';
+      link.onclick=()=>{
+        const expanded=link.textContent==='Read Less';
+        p.textContent=expanded?short+'... ':full+' ';
+        link.textContent=expanded?'Read More':'Read Less';
+        p.appendChild(link);
+      };
+      p.appendChild(link);
+    }else p.textContent=full;
+    art.append(title,p);
+    content.append(art);
+    const li=document.createElement('li');
+    const sa=document.createElement('a');
+    sa.textContent=a.title;
+    sa.href='#article-'+id;
+    li.append(sa);
+    sidebar.append(li);
+  });
+  const arts=document.querySelectorAll('article');
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+  },{threshold:0.1});
+  arts.forEach(a=>obs.observe(a));
 }
 
-renderBtn.addEventListener('click', ()=>{
-  updatePreview();
-  const W=1200,H=800;
-  canvas.width=W; canvas.height=H;
-
-  if(uploadedImage){
-    const img=uploadedImage;
-    const imgRatio=img.width/img.height,canvasRatio=W/H;
-    let sx,sy,sWidth,sHeight;
-    if(imgRatio>canvasRatio){sHeight=img.height;sWidth=img.height*canvasRatio;sx=(img.width-sWidth)/2;sy=0;}
-    else{sWidth=img.width;sHeight=img.width/canvasRatio;sx=0;sy=(img.height-sHeight)/2;}
-    ctx.drawImage(img,sx,sy,sWidth,sHeight,0,0,W,H);
-    const g=ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,'rgba(0,0,0,0.18)'); g.addColorStop(1,'rgba(0,0,0,0.28)');
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-  } else {
-    const g=ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,'#006b3c'); g.addColorStop(1,'#00994d');
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-  }
-
-  ctx.fillStyle='#c9f7df';
-  ctx.beginPath();
-  ctx.arc(60,60,26,0,Math.PI*2);
-  ctx.fill();
-  ctx.lineWidth=4;
-  ctx.strokeStyle='#ffd700';
-  ctx.stroke();
-  ctx.font='bold 28px Arial';
-  ctx.fillStyle='black';
-  ctx.fillText('PP',45,70);
-  ctx.font='bold 22px Arial';
-  ctx.fillStyle='#ffd700';
-  ctx.fillText('The PrimePost',100,70);
-
-  ctx.save();
-  ctx.translate(W*0.06,H*0.5);
-  ctx.rotate(-0.5);
-  ctx.font='bold 80px Arial';
-  ctx.fillStyle='rgba(255,255,255,0.06)';
-  ctx.fillText('PRIME POST',0,0);
-  ctx.restore();
-
-  ctx.fillStyle='#ffffff';
-  ctx.font='bold 46px Arial';
-  wrapText(ctx,titleInput.value.trim()||'Card title will appear here',40,520,W-80,52); /* shifted down */
-
-  ctx.font='bold 26px Arial';
-  ctx.fillStyle='rgba(255,255,255,0.95)';
-  wrapText(ctx,descInput.value.trim()||'Short description will appear here — keep it short for best results.',40,620,W-80,36); /* shifted down */
-
-  ctx.font='bold 18px Arial';
-  ctx.fillStyle='#ffd700';
-  ctx.fillText(linkInput.value.trim()||'primepost.co.ke',40,H-36);
-
-  downloadBtn.disabled=false;
+document.addEventListener('DOMContentLoaded',()=>{
+  loadArticles();
+  document.querySelectorAll('nav a').forEach(a=>{
+    a.addEventListener('click',()=>displayArticles(a.dataset.category));
+  });
 });
-
-downloadBtn.addEventListener('click', ()=>{
-  const dataUrl=canvas.toDataURL('image/png');
-  const a=document.createElement('a');
-  a.href=dataUrl; a.download=(titleInput.value.trim().slice(0,30)||'primepost-card')+'.png';
-  document.body.appendChild(a); a.click(); a.remove();
-});
-
-[titleInput,descInput,linkInput].forEach(inp=>inp.addEventListener('input',updatePreview));
-updatePreview();
 </script>
 </body>
 </html>
