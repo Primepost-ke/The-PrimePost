@@ -14,12 +14,7 @@ header p { margin: 5px 0 0; font-size: 1.1em; }
 .ticker span { display: inline-block; padding-left: 100%; animation: scroll 85s linear infinite; }
 @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-nav.nav-collapsed {
-  height: 20px;
-  padding: 0;
-  overflow: hidden;
-  transition: height 0.3s ease, padding 0.3s ease;
-}
+nav.nav-collapsed { height: 20px; padding: 0; overflow: hidden; transition: height 0.3s ease, padding 0.3s ease; }
 nav { background: #00994d; position: fixed; top: 126px; width: 100%; z-index: 998; display: flex; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; }
 nav.nav-squeeze { padding: 5px 0; font-size: 0.85em; }
 .nav-container { display: flex; justify-content: center; align-items: center; gap: 30px; padding: 10px 0; flex-wrap: wrap; max-width: 1200px; }
@@ -44,7 +39,7 @@ article p { line-height: 1.6; white-space: pre-wrap; font-weight: normal; font-s
 article img { width: 100%; max-height: 350px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; display: block; opacity: 0; transition: opacity 1.5s ease-in; }
 article img.loaded { opacity: 1; }
 
-.sidebar { flex: 1; background: #fff; padding: 20px; box-shadow: 0 0 8px rgba(0,0,0,0.1); height: fit-content; }
+.sidebar { flex: 1; background: #fff; padding: 50px 20px 20px 20px; box-shadow: 0 0 8px rgba(0,0,0,0.1); height: fit-content; }
 .sidebar h3 { color: #006b3c; margin-bottom: 15px; border-bottom: 2px solid #ffd700; padding-bottom: 5px; }
 .sidebar ul { list-style: none; padding: 0; }
 .sidebar li { margin-bottom: 10px; }
@@ -91,7 +86,6 @@ footer { text-align: center; padding: 15px; background: #006b3c; color: white; f
     <div class="content"></div>
     <aside class="sidebar"><h3>Latest Stories</h3><ul></ul></aside>
   </main>
-
   <section class="about">
     <img src="primepost.png" alt="LOGO">
     <h2>About Us</h2>
@@ -104,6 +98,7 @@ footer { text-align: center; padding: 15px; background: #006b3c; color: white; f
 <footer>
   <p>&copy; 2025 <span>Prime Post</span> | Maintained by Smartlands Media Solutions</p>
 </footer>
+
 <script>
 const sheetCsv="https://docs.google.com/spreadsheets/d/e/2PACX-1vS0r_06emfY3q-DDviZJ0osojgBlleOFusWuvu7BLgck-TS7Rk1c4ugtwQHb2hPUmcdIQQi469WS3K9/pub?output=csv";
 const proxy="https://api.codetabs.com/v1/proxy?quest=";
@@ -153,7 +148,6 @@ function displayArticles(cat){
   let arts=allArticles;
   if(cat!=='Home') arts=arts.filter(a=>a.category&&a.category.toLowerCase()===cat.toLowerCase());
   else arts=arts.slice(0,10);
-
   arts.forEach((a,i)=>{
     const id=i+1;
     const art=document.createElement('article');
@@ -161,7 +155,13 @@ function displayArticles(cat){
     const title=document.createElement('h2');
     title.textContent=a.title||'Untitled';
     const img=a.image?a.image.trim():'';
-    if(img){const im=document.createElement('img'); im.dataset.src=img; im.loading='lazy'; im.addEventListener('load',()=>im.classList.add('loaded')); art.append(im);}
+    if(img){
+      const im=document.createElement('img');
+      im.dataset.src=img;
+      im.loading='lazy';
+      im.addEventListener('load',()=>im.classList.add('loaded'));
+      art.append(im);
+    }
 
     const p=document.createElement('p');
     const full=a.content||'', short=makePreview(full,30);
@@ -175,7 +175,8 @@ function displayArticles(cat){
       p.textContent = expanded ? short+'... ' : full+' ';
       link.textContent = expanded ? 'Read More' : 'Read Less';
       if(link.textContent) p.appendChild(link);
-      const nav = document.querySelector('nav'); if(!expanded){   nav.classList.add('nav-collapsed'); }else{   nav.classList.remove('nav-collapsed'); }
+      const nav = document.querySelector('nav');
+      if(!expanded){ nav.classList.add('nav-collapsed'); } else { nav.classList.remove('nav-collapsed'); }
       if(!expanded){ setTimeout(()=>{ art.scrollIntoView({behavior:'smooth', block:'start'}); },150);}
     }
 
@@ -184,15 +185,53 @@ function displayArticles(cat){
     art.append(title,p);
     c.append(art);
 
-    const li=document.createElement('li'); const sa=document.createElement('a'); sa.textContent=a.title; sa.href='#article-'+id; li.append(sa); s.append(li);
+    // Sidebar link
+    const li=document.createElement('li');
+    const sa=document.createElement('a');
+    sa.textContent=a.title;
+    sa.href='#article-'+id;
+
+    // Robust scroll handler: pick image if present, otherwise article; compute dynamic offset and scroll once
+    sa.addEventListener('click', e=>{
+      e.preventDefault();
+      const targetArticle = document.getElementById('article-'+id);
+      if(targetArticle){
+        const header = document.querySelector('header');
+        const ticker = document.querySelector('.ticker');
+        const nav = document.querySelector('nav');
+        const totalOffset = (header?.offsetHeight||0) + (ticker?.offsetHeight||0) + (nav?.offsetHeight||0) + 10;
+
+        const scrollElement = targetArticle.querySelector('img') || targetArticle;
+        // Ensure lazy image is loaded source is set so element height is correct
+        const imgData = scrollElement.tagName === 'IMG' ? scrollElement : null;
+        if(imgData && imgData.dataset && imgData.dataset.src && !imgData.src){
+          // set src first so layout can calculate height, then scroll after a short delay to allow image to start loading
+          imgData.src = imgData.dataset.src;
+          // wait a tick for layout then calculate position and scroll
+          setTimeout(()=>{
+            const rect = imgData.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            window.scrollTo({ top: scrollTop + rect.top - totalOffset, behavior: 'smooth' });
+          }, 120);
+        } else {
+          const rect = scrollElement.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          window.scrollTo({ top: scrollTop + rect.top - totalOffset, behavior: 'smooth' });
+        }
+      }
+    });
+
+    li.append(sa);
+    s.append(li);
   });
 
+  // IntersectionObserver for article reveal & lazy loading
   const obs=new IntersectionObserver(es=>{
     es.forEach(e=>{
       if(e.isIntersecting){
         e.target.classList.add('visible');
         const im=e.target.querySelector('img[data-src]');
-        if(im&&!im.src) im.src=im.dataset.src;
+        if(im && !im.src) im.src=im.dataset.src;
       }
     });
   },{threshold:0.1});
@@ -221,6 +260,20 @@ document.addEventListener('DOMContentLoaded',()=>{
       navLinks.forEach(n=>n.classList.remove('active'));
       a.classList.add('active');
       displayArticles(a.dataset.category);
+
+      // Scroll 'Latest Stories' heading into view after category click
+      setTimeout(()=>{
+        const latestStoriesHeading = document.querySelector('.sidebar h3');
+        if(latestStoriesHeading){
+          const header = document.querySelector('header');
+          const ticker = document.querySelector('.ticker');
+          const nav = document.querySelector('nav');
+          const totalOffset = (header?.offsetHeight||0) + (ticker?.offsetHeight||0) + (nav?.offsetHeight||0) + 10;
+          const rect = latestStoriesHeading.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          window.scrollTo({ top: scrollTop + rect.top - totalOffset, behavior: 'smooth' });
+        }
+      }, 200);
     });
   });
 });
