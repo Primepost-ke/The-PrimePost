@@ -11,9 +11,42 @@ header h1 { margin: 0; font-size: 2em; }
 header p { margin: 5px 0 0; font-size: 1.1em; }
 
 .ticker { background: #00994d; color: #ffd700; font-weight: bold; padding: 8px; overflow: hidden; white-space: nowrap; position: fixed; top: 95px; width: 100%; z-index: 999; }
-.ticker span { display: inline-block; padding-left: 100%; animation: scroll 95s linear infinite; }
+.ticker span { display: inline-block; padding-left: 100%; animation: scroll 85s linear infinite; }
 @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
+.advertise-bar {
+  background: #006b3c;
+  text-align: center;
+  padding: 12px 16px;
+  font-weight: bold;
+  font-size: 17px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  position: fixed;
+  top: 166px; /* just below your nav bar */
+  width: 100%;
+  z-index: 997;
+};
+.advertise-bar {
+  background: #006b3c;
+  text-align: center;
+  padding: 12px 16px;
+  font-weight: bold;
+  font-size: 17px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  width: 100%;
+  color: #fff;
+  position: relative;
+  z-index: 996;
+}
+
+.advertise-bar a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.advertise-bar a:hover {
+  color: #ffd700;
+}
 nav.nav-collapsed { height: 20px; padding: 0; overflow: hidden; transition: height 0.3s ease, padding 0.3s ease; }
 nav { background: #00994d; position: fixed; top: 126px; width: 100%; z-index: 998; display: flex; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; }
 nav.nav-squeeze { padding: 5px 0; font-size: 0.85em; }
@@ -27,7 +60,7 @@ nav a.active { background: #ffd700; color: #006b3c; }
   nav a { padding: 10px 14px; font-size: 0.95em; }
 }
 
-.scroll-section { margin-top: 170px; min-height: calc(100vh - 170px); overflow-y: auto; scroll-behavior: smooth; padding-bottom: 30px; }
+.scroll-section { margin-top: 180px; min-height: calc(100vh - 170px); overflow-y: auto; scroll-behavior: smooth; padding-bottom: 30px; }
 
 main { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
 .content { flex: 3; background: white; padding: 20px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
@@ -58,7 +91,6 @@ footer { text-align: center; padding: 15px; background: #006b3c; color: white; f
 @media (max-width: 900px) {
   main { flex-direction: column; }
   .sidebar { order: -1; }
-}
 </style>
 </head>
 <body>
@@ -80,11 +112,13 @@ footer { text-align: center; padding: 15px; background: #006b3c; color: white; f
     <a data-category="Opinion">Opinion</a>
   </div>
 </nav>
-
+<div class="advertise-bar">
+  <a href="ADS.html">📢 Advertise with Prime Post</a>
+</div>
 <div class="scroll-section">
   <main>
     <div class="content"></div>
-    <aside class="sidebar"><h3>Latest Stories</h3><ul></ul></aside>
+    <aside class="sidebar">   <div class="advertise-box" style="background:#006b3c;color:#fff;padding:12px 14px;border-radius:8px;margin-bottom:14px;text-align:center;">     <a href="ADS.html" style="color:#fff;font-weight:bold;font-size:16px;text-decoration:none;">📢 Advertise with Prime Post</a>   </div>   <h3>Latest Stories</h3>   <ul></ul> </aside>
   </main>
   <section class="about">
     <img src="primepost.png" alt="LOGO">
@@ -289,4 +323,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 </body>
-      </html>
+  </html>
