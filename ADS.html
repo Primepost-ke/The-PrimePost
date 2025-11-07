@@ -36,9 +36,36 @@ nav a:hover {
   background: #007a40;
   color: #ffd700;
 }
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px auto;
+  text-align: center;
+}
+.filter-bar select, .filter-bar input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+}
+.filter-bar button {
+  padding: 10px 20px;
+  border: none;
+  background: #006b3c;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.filter-bar button:hover {
+  background: #007a40;
+  color: #ffd700;
+}
 main {
   max-width: 1200px;
-  margin: 30px auto;
+  margin: 10px auto 30px;
   padding: 20px;
   background: #fff;
   box-shadow: 0 0 8px rgba(0,0,0,0.1);
@@ -47,7 +74,7 @@ main {
 h2 {
   color: #006b3c;
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 }
 .ads-grid {
   display: grid;
@@ -75,22 +102,29 @@ h2 {
   margin: 10px;
 }
 .ad-card p {
-  margin: 0 10px 15px;
+  margin: 0 10px 10px;
   font-size: 0.95em;
   line-height: 1.5;
 }
-.ad-card a {
+.ad-card .price, .ad-card .date, .ad-card .location {
+  margin: 0 10px 10px;
+  font-size: 0.85em;
+  color: #555;
+}
+.ad-card button {
   display: inline-block;
   margin: 0 10px 15px;
-  text-decoration: none;
-  background: #00994d;
-  color: white;
+  background: #006b3c;
+  color: #fff;
   padding: 8px 12px;
   border-radius: 5px;
+  border: none;
   font-weight: bold;
+  cursor: pointer;
 }
-.ad-card a:hover {
+.ad-card button:hover {
   background: #007a40;
+  color: #ffd700;
 }
 footer {
   text-align: center;
@@ -101,6 +135,91 @@ footer {
   font-size: 0.9em;
 }
 footer span { color: #ffd700; }
+
+/* Modal Styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.7);
+}
+.modal-content {
+  background-color: #004d29;
+  color: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(255,215,0,0.4);
+}
+.close-btn {
+  color: #ffd700;
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+.close-btn:hover { color: white; }
+.modal-content a {
+  color: #ffd700;
+  text-decoration: none;
+  font-weight: bold;
+}
+.modal-content a:hover { text-decoration: underline; }
+/* Dropdown Button Styling */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropbtn {
+  background: linear-gradient(90deg, #007a40, #00c853);
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 14px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+.dropbtn:hover {
+  color: #ffd700;
+  box-shadow: 0 0 10px #ffd700;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 180px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  z-index: 10;
+  animation: fadeIn 0.2s ease-in-out;
+}
+.dropdown-content a {
+  color: #006b3c;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-weight: bold;
+}
+.dropdown-content a:hover {
+  background-color: #e6f4ec;
+  color: #007a40;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -109,42 +228,158 @@ footer span { color: #ffd700; }
   <h1>The Prime Post</h1>
   <p>Your Source for Trusted Trending News</p>
 </header>
-
 <nav>
   <a href="index.html">Home</a>
+  <div class="dropdown">
+  <button class="dropbtn" style="background:linear-gradient(90deg,#ffd700,#caa300);color:#000;font-weight:bold;border:none;padding:10px 16px;border-radius:10px;box-shadow:0 0 10px rgba(255,215,0,0.6);transition:all 0.3s;">
+    All Categories ▾
+  </button>
+  <div class="dropdown-content" id="categoryMenu" style="border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.15);">
+    <a href="#" onclick="filterCategory('All')">All</a>
+    <a href="#" onclick="filterCategory('Vehicles')">Vehicles</a>
+    <a href="#" onclick="filterCategory('Property')">Property</a>
+    <a href="#" onclick="filterCategory('Jobs')">Jobs</a>
+    <a href="#" onclick="filterCategory('Electronics')">Electronics</a>
+    <a href="#" onclick="filterCategory('Fashion')">Fashion</a>
+    <a href="#" onclick="filterCategory('Services')">Services</a>
+  </div>
+</div>
   <a href="advertise.html">Advertise</a>
   <a href="ads.html" style="background:#007a40;color:#ffd700;">Ads</a>
 </nav>
 
+<div class="filter-bar">
+  <select id="categoryFilter">
+    <option value="">All Categories</option>
+  </select>
+  <input type="text" id="searchInput" placeholder="Search ads...">
+  <button onclick="applyFilters()">Filter</button>
+</div>
+
 <main>
   <h2>Current Advertisements</h2>
-  <div class="ads-grid" id="adsGrid">
-    <div class="ad-card">
-      <img src="https://i.imgur.com/IEVIMdd.jpeg" alt="Ad 1">
-      <h3>Jackson Retail Store</h3>
-      <p>Get the best household products, cereals, and essentials at unbeatable prices near Nyalweny Shopping Centre.</p>
-      <a href="#">Visit Store</a>
-    </div>
-
-    <div class="ad-card">
-      <img src="https://i.imgur.com/MbfsMd9.png" alt="Ad 2">
-      <h3>PrimePost Media Promotions</h3>
-      <p>Promote your brand to thousands of online readers through PrimePost ads. Affordable and effective advertising.</p>
-      <a href="advertise.html">Advertise Now</a>
-    </div>
-
-    <div class="ad-card">
-      <img src="https://i.imgur.com/SgfAPNT.png" alt="Ad 3">
-      <h3>GreenTech Solar Systems</h3>
-      <p>Power your home and business sustainably with solar energy systems from GreenTech Kenya.</p>
-      <a href="#">Learn More</a>
-    </div>
-  </div>
+  <div class="ads-grid" id="adsGrid"></div>
 </main>
 
 <footer>
-  <p>&copy; 2025 <span>Prime Post</span> | Maintained by smartlands Media Solutions | Contact: primepost.ke@gmail.com</p>
+  <p>&copy; 2025 <span>Prime Post</span> | Maintained by Smartlands Media Solutions | Contact: primepost.ke@gmail.com</p>
 </footer>
 
+<!-- Modal -->
+<div id="contactModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h3>Seller Contact</h3>
+    <p id="contactInfo"></p>
+  </div>
+</div>
+
+<script>
+const sheetCSV = "https://corsproxy.io/?https://docs.google.com/spreadsheets/d/10p2qw2K9WBTV2GhwrvN4Xj6Oc_E2plqB2FWN8y1tchk/export?format=csv&gid=0";
+let adsData = [];
+
+async function loadAds() {
+  try {
+    const response = await fetch(sheetCSV);
+    const data = await response.text();
+    const rows = data.split("\n").slice(1);
+    const adsGrid = document.getElementById("adsGrid");
+    const categories = new Set();
+
+    rows.forEach(row => {
+      const columns = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+      if (!columns || columns.length < 9) return;
+
+      const [title, description, image, price, date, status, link, location, contact, category] = columns.map(c => c.replace(/^"|"$/g, '').trim());
+
+      if (status.toLowerCase() === "active") {
+        adsData.push({ title, description, image, price, date, link, location, contact, category });
+        if (category) categories.add(category);
+      }
+    });
+
+    document.getElementById("categoryFilter").innerHTML +=
+      Array.from(categories).map(cat => `<option value="${cat}">${cat}</option>`).join("");
+
+    displayAds(adsData);
+  } catch (err) {
+    document.getElementById("adsGrid").innerHTML = "<p style='color:red; text-align:center;'>Failed to load ads. Try again later.</p>";
+  }
+}
+
+function displayAds(ads) {
+  const adsGrid = document.getElementById("adsGrid");
+  adsGrid.innerHTML = "";
+  ads.forEach(ad => {
+    const displayPrice = ad.price && ad.price.toLowerCase() === "negotiable"
+      ? "Negotiable" : ad.price ? "Price: " + ad.price : "";
+    const adCard = document.createElement("div");
+    adCard.className = "ad-card";
+    adCard.setAttribute("data-category", ad.category || "Other");
+    adCard.innerHTML = `
+      <img src="${ad.image}" alt="${ad.title}">
+      <h3>${ad.title}</h3>
+      <p>${ad.description}</p>
+      ${ad.location ? `<p class="location">Location: ${ad.location}</p>` : ""}
+      ${displayPrice ? `<p class="price">${displayPrice}</p>` : ""}
+      ${ad.date ? `<p class="date">Posted: ${ad.date}</p>` : ""}
+      <button onclick="showContact('${ad.contact}')">Contact</button>
+    `;
+    adsGrid.appendChild(adCard);
+  });
+}
+
+function applyFilters() {
+  const category = document.getElementById("categoryFilter").value.toLowerCase();
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const filtered = adsData.filter(ad =>
+    (!category || (ad.category && ad.category.toLowerCase() === category)) &&
+    (ad.title.toLowerCase().includes(search) || ad.description.toLowerCase().includes(search))
+  );
+  displayAds(filtered);
+}
+
+function showContact(contact) {
+  const modal = document.getElementById("contactModal");
+  const contactInfo = document.getElementById("contactInfo");
+
+  if (!contact) {
+    contactInfo.innerHTML = "No contact info available.";
+  } else if (/^\+?\d+$/.test(contact)) {
+    let phone = contact.replace(/\D/g, "");
+    if (phone.startsWith("0")) phone = "254" + phone.substring(1);
+    if (!phone.startsWith("254")) phone = "254" + phone;
+    contactInfo.innerHTML = `Call or WhatsApp: <a href="https://wa.me/${phone}" target="_blank">${phone}</a>`;
+  } else if (contact.includes("@")) {
+    contactInfo.innerHTML = `Email: <a href="mailto:${contact}">${contact}</a>`;
+  } else {
+    contactInfo.innerHTML = contact;
+  }
+  modal.style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("contactModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+  const modal = document.getElementById("contactModal");
+  if (event.target === modal) closeModal();
+};
+
+loadAds();
+function filterCategory(category) {
+  const adCards = document.querySelectorAll('.ad-card');
+  adCards.forEach(card => {
+    const cardCategory = card.getAttribute('data-category') || '';
+    if (category === 'All' || cardCategory.toLowerCase() === category.toLowerCase()) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
 </body>
-</html>
+  </html>
