@@ -11,32 +11,33 @@ header h1 { margin: 0; font-size: 2em; }
 header p { margin: 5px 0 0; font-size: 1.1em; }
 
 .ticker { background: #00994d; color: #ffd700; font-weight: bold; padding: 8px; overflow: hidden; white-space: nowrap; position: fixed; top: 95px; width: 100%; z-index: 999; }
-.ticker span { display: inline-block; padding-left: 100%; animation: scroll 85s linear infinite; }
+.ticker span { display: inline-block; padding-left: 100%; animation: scroll 105s linear infinite; }
 @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
 .advertise-bar {
   background: #006b3c;
-  text-align: center;
-  padding: 12px 16px;
+  text-align:center;
+  padding: 10px 16px;
   font-weight: bold;
   font-size: 17px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   position: fixed;
-  top: 166px; /* just below your nav bar */
+  top: 145px; /* just below your nav bar */
   width: 100%;
-  z-index: 997;
+  z-index: 996;
 };
 .advertise-bar {
   background: #006b3c;
   text-align: center;
-  padding: 12px 16px;
+  padding: 10px 16px;
   font-weight: bold;
   font-size: 17px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  width: 100%;
   color: #fff;
-  position: relative;
+  position: fixed; /* change from relative to fixed */
+  top: 120px; /* adjust to match header height */
+  width: 100%;
   z-index: 996;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .advertise-bar a {
@@ -113,12 +114,12 @@ footer { text-align: center; padding: 15px; background: #006b3c; color: white; f
   </div>
 </nav>
 <div class="advertise-bar">
-  <a href="ADS.html">📢 Advertise with Prime Post</a>
+  <a href="ADS.html">📢 ADVERTS WITH PRIMEPOST</a>
 </div>
 <div class="scroll-section">
   <main>
     <div class="content"></div>
-    <aside class="sidebar">   <div class="advertise-box" style="background:#006b3c;color:#fff;padding:12px 14px;border-radius:8px;margin-bottom:14px;text-align:center;">     <a href="ADS.html" style="color:#fff;font-weight:bold;font-size:16px;text-decoration:none;">📢 Advertise with Prime Post</a>   </div>   <h3>Latest Stories</h3>   <ul></ul> </aside>
+    <aside class="sidebar">   <div class="advertise-box" style="background:#006b3c;color:#fff;padding:12px 14px;border-radius:8px;margin-bottom:14px;text-align:center;">     <a href="ADS.html" style="color:#fff;font-weight:bold;font-size:16px;text-decoration:none;">📢 ADVERTS WITH PRIMEPOST</a>   </div>   <h3>Latest Stories</h3>   <ul></ul> </aside>
   </main>
   <section class="about">
     <img src="primepost.png" alt="LOGO">
@@ -130,7 +131,7 @@ footer { text-align: center; padding: 15px; background: #006b3c; color: white; f
 </div>
 
 <footer>
-  <p>&copy; 2025 <span>Prime Post</span> | Maintained by Smartlands Media Solutions</p>
+  <p>&copy; 2025 <span>Prime Post</span> | Powered by Smartlands Media Solutions</p>
 </footer>
 
 <script>
@@ -323,4 +324,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 </body>
-  </html>
+      </html>
