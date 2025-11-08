@@ -283,6 +283,7 @@ async function loadAds() {
     const response = await fetch(sheetCSV);
     const data = await response.text();
     const rows = data.split("\n").slice(1);
+    rows.reverse();
     const adsGrid = document.getElementById("adsGrid");
     const categories = new Set();
 
@@ -382,4 +383,4 @@ function filterCategory(category) {
 </script>
 
 </body>
-  </html>
+      </html>
